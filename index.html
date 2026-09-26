@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b141a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Kharimli WhatsApp Ultra Pro v10.2 (Mobil Düzəldilmiş)</title>
+  <style>
+    :root {
+      --bg-color: #0b141a;
+      --card-bg: #111b21;
+      --header-bg: #202c33;
+      --text-color: #e9edef;
+      --accent-color: #00a884;
+      --msg-sent: #005c4b;
+      --msg-recv: #202c33;
+      --input-bg: #2a3942;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --wallpaper: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 0);
+    }
+
+    body.theme-light {
+      --bg-color: #efeae2;
+      --card-bg: #ffffff;
+      --header-bg: #f0f2f5;
+      --text-color: #111b21;
+      --accent-color: #00a884;
+      --msg-sent: #d9fdd3;
+      --msg-recv: #ffffff;
+      --input-bg: #f0f2f5;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --wallpaper: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0);
+    }
+
+    body.theme-darkblue {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --header-bg: #0f172a;
+      --text-color: #f8fafc;
+      --accent-color: #38bdf8;
+      --msg-sent: #0369a1;
+      --msg-recv: #1e293b;
+      --input-bg: #334155;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.theme-matrix {
+      --bg-color: #000000;
+      --card-bg: #051c05;
+      --header-bg: #0a2e0a;
+      --text-color: #00ff66;
+      --accent-color: #00ff66;
+      --msg-sent: #003311;
+      --msg-recv: #0a2e0a;
+      --input-bg: #051c05;
+      --border-color: rgba(0, 255, 102, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; height: 100vh; height: 100dvh; overflow: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.35); border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    /* Auth Screen */
+    .auth-card {
+      background: var(--card-bg); padding: 35px; border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7); width: 92%; max-width: 420px; text-align: center;
+      border: 1px solid var(--border-color); animation: fadeIn 0.5s ease;
+      max-height: 92vh; max-height: 92dvh; overflow-y: auto;
+    }
+    .auth-card h2 { color: var(--accent-color); margin-bottom: 8px; font-size: 26px; font-weight: 800; }
+    .auth-card p { font-size: 13px; opacity: 0.7; margin-bottom: 24px; }
+    .auth-card input { width: 100%; padding: 12px 16px; margin: 10px 0; border: none; background: var(--input-bg); color: var(--text-color); border-radius: 12px; outline: none; font-size: 14px; border: 1px solid var(--border-color); }
+    .main-btn { width: 100%; padding: 12px; background: var(--accent-color); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 8px; font-size: 15px; }
+    .main-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .google-btn { background: #db4437; }
+    .phone-btn { background: #25d366; }
+    .divider { margin: 16px 0; font-size: 12px; opacity: 0.6; }
+
+    /* Main App Layout */
+    .chat-app { display: none; width: 100%; max-width: 900px; height: 100vh; height: 100dvh; background: var(--bg-color); position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.6); }
+    @media(min-width: 768px) { .chat-app { height: 94vh; border-radius: 18px; border: 1px solid var(--border-color); overflow: hidden; flex-direction: row; } }
+
+    /* Left Sidebar: Tabs & Navigation */
+    .sidebar-nav { width: 75px; background: var(--header-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 16px 0; justify-content: space-between; }
+    .nav-icons { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+    .nav-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-color); opacity: 0.6; transition: 0.2s; position: relative; padding: 8px; border-radius: 50%; }
+    .nav-btn.active, .nav-btn:hover { opacity: 1; background: var(--input-bg); color: var(--accent-color); }
+
+    /* Main Chats Column */
+    .chats-column { width: 320px; background: var(--card-bg); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; height: 100%; }
+    .column-header { padding: 14px 16px; background: var(--header-bg); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+    .column-header h3 { font-size: 18px; font-weight: 700; color: var(--text-color); }
+
+    .search-box-wrap { padding: 10px 14px; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
+    .search-box-wrap input { width: 100%; padding: 8px 14px; background: var(--input-bg); border: none; border-radius: 20px; color: var(--text-color); font-size: 13px; outline: none; }
+
+    .items-list { flex: 1; overflow-y: auto; }
+    .list-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid var(--border-color); transition: 0.15s; position: relative; }
+    .list-item:hover, .list-item.active { background: var(--input-bg); }
+
+    .avatar { width: 46px; height: 46px; background: var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; flex-shrink: 0; position: relative; font-size: 18px; background-size: cover; background-position: center; }
+    .online-badge { width: 11px; height: 11px; background: #25d366; border-radius: 50%; position: absolute; bottom: 2px; right: 2px; border: 2px solid var(--header-bg); display: none; }
+    .online-badge.active { display: block; }
+
+    /* YENİ: oxunmamış say nişanı */
+    .unread-badge { background: var(--accent-color); color: #fff; font-size: 11px; font-weight: bold; border-radius: 12px; padding: 2px 7px; margin-left: auto; }
+
+    /* Right Chat Panel */
+    .chat-main-panel { flex: 1; display: flex; flex-direction: column; background: var(--bg-color); height: 100%; position: relative; min-width: 0; }
+    .chat-header { background: var(--header-bg); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+    /* YENİ: mobil geri düyməsi */
+    #backBtn { display: none; }
+
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-image: var(--wallpaper); background-size: 22px 22px; }
+
+    .message-wrapper { display: flex; flex-direction: column; max-width: 78%; position: relative; animation: fadeIn 0.2s ease; }
+    .message-wrapper.sent { align-self: flex-end; }
+    .message-wrapper.received { align-self: flex-start; }
+
+    .message-box { background: var(--msg-recv); padding: 10px 14px; border-radius: 12px; font-size: 14.5px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); position: relative; word-break: break-word; }
+    .sent .message-box { background: var(--msg-sent); }
+    .sent .message-box { border-top-right-radius: 2px; }
+    .received .message-box { border-top-left-radius: 2px; }
+
+    .message-meta { font-size: 10px; opacity: 0.7; text-align: right; margin-top: 3px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
+
+    /* YENİ: düzəldilmiş mesaj göstəricisi */
+    .edited-tag { font-size: 9px; opacity: 0.6; font-style: italic; }
+
+    /* Input Container & Tools */
+    .chat-input-container { background: var(--header-bg); padding: 10px 16px; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border-color); position: relative; }
+    .chat-input-container input[type="text"] { flex: 1; padding: 11px 16px; border: none; background: var(--input-bg); color: var(--text-color); border-radius: 24px; outline: none; font-size: 14px; min-width: 0; }
+    .icon-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #8696a0; transition: 0.2s; padding: 4px; }
+    .icon-btn:hover { color: var(--accent-color); }
+    .send-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-color); border: none; color: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* Modals & Popups */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+    .modal-card { background: var(--card-bg); width: 92%; max-width: 480px; border-radius: 20px; padding: 24px; border: 1px solid var(--border-color); box-shadow: 0 15px 40px rgba(0,0,0,0.6); animation: scaleUp 0.3s ease; max-height: 90vh; max-height: 90dvh; overflow-y: auto; }
+    .modal-card h3 { color: var(--accent-color); margin-bottom: 18px; font-size: 20px; display: flex; justify-content: space-between; align-items: center; }
+
+    .settings-group { margin-bottom: 16px; }
+    .settings-group label { font-size: 12px; opacity: 0.8; display: block; margin-bottom: 6px; font-weight: 600; }
+    .settings-group input, .settings-group select { width: 100%; padding: 10px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 10px; outline: none; }
+
+    .status-ring { width: 56px; height: 56px; border-radius: 50%; border: 3px solid var(--accent-color); padding: 2px; cursor: pointer; }
+    .status-ring img, .status-ring .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+    /* Call Screen Interface */
+    #callScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b141a; z-index: 200; flex-direction: column; justify-content: space-between; align-items: center; padding: 40px 20px; padding-top: max(40px, env(safe-area-inset-top)); padding-bottom: max(40px, env(safe-area-inset-bottom)); text-align: center; }
+    .call-avatar { width: 120px; height: 120px; border-radius: 50%; background: var(--accent-color); font-size: 48px; display: flex; align-items: center; justify-content: center; color: white; margin: 40px auto 20px; background-size: cover; box-shadow: 0 0 30px rgba(0,168,132,0.4); animation: pulse 2s infinite; }
+    .call-actions { display: flex; gap: 30px; margin-bottom: 40px; }
+    .call-btn { width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
+    .accept-call { background: #25d366; }
+    .end-call { background: #dc3545; }
+
+    /* Reactions & Actions */
+    .msg-actions { display: none; position: absolute; top: -14px; right: 0; background: var(--header-bg); border-radius: 6px; padding: 2px 6px; gap: 6px; z-index: 10; border: 1px solid var(--border-color); align-items: center; }
+    .message-wrapper:hover .msg-actions, .message-wrapper.show-actions .msg-actions { display: flex; }
+    .msg-actions button { background: none; border: none; font-size: 13px; cursor: pointer; color: var(--text-color); padding: 2px 4px; }
+    .emoji-picker-popup { display: none; position: absolute; top: -38px; right: 0; background: var(--header-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 4px 8px; gap: 6px; z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .emoji-picker-popup span { cursor: pointer; font-size: 15px; transition: 0.1s; }
+    .emoji-picker-popup span:hover { transform: scale(1.2); }
+    .reactions-container { display: flex; gap: 3px; position: absolute; bottom: -10px; left: 10px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 1px 5px; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; }
+
+    /* YENİ: "yeni mesaj" bildiriş zolağı */
+    #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--header-bg); color: var(--text-color); padding: 10px 18px; border-radius: 24px; font-size: 13px; border: 1px solid var(--border-color); box-shadow: 0 6px 20px rgba(0,0,0,0.4); z-index: 300; display: none; animation: scaleUp 0.25s ease; max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ============================================================
+       MOBİL UYĞUNLUQ — telefon ölçüsündə tam ekran
+       ============================================================ */
+    @media (max-width: 767px) {
+      body { align-items: stretch; }
+      .chat-app { max-width: 100%; height: 100vh; height: 100dvh; border-radius: 0; border: none; }
+      .sidebar-nav { display: none; }
+      .chats-column { width: 100%; border-right: none; }
+      .chat-main-panel { display: none; width: 100%; }
+      .chat-app.mobile-chat-open .chats-column { display: none; }
+      .chat-app.mobile-chat-open .chat-main-panel { display: flex; }
+      #backBtn { display: inline-block; }
+      .chat-header { padding: 10px 10px; padding-top: max(10px, env(safe-area-inset-top)); }
+      .chat-input-container { padding: 8px 8px; padding-bottom: max(8px, env(safe-area-inset-bottom)); gap: 6px; flex-wrap: nowrap; }
+      .message-wrapper { max-width: 88%; }
+      .chat-messages { padding: 14px 10px; }
+      .column-header { padding-top: max(14px, env(safe-area-inset-top)); }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
+  </style>
+</head>
+<body class="theme-dark">
+
+  <!-- AUTH SCREEN -->
+  <div id="authScreen" class="auth-card">
+    <h2>Kharimli WhatsApp Ultra</h2>
+    <p>Dünyanın Ən İnkişaf Etmiş Web Söhbət Platforması</p>
+    <button id="googleLoginBtn" class="main-btn google-btn">🔴 Google ilə Giriş Et</button>
+    <div class="divider">və ya mobil nömrə ilə</div>
+    <input type="tel" id="phoneInput" placeholder="+994XXXXXXXXX">
+    <button id="sendOtpBtn" class="main-btn phone-btn">📱 SMS Təsdiq Kodu Göndər</button>
+    <div id="otpBox" style="display: none; margin-top: 10px;">
+      <input type="text" id="otpInput" placeholder="6 rəqəmli SMS kodunu yazın">
+      <button id="verifyOtpBtn" class="main-btn">✅ Kodu Təsdiqlə</button>
+    </div>
+    <div class="divider">və ya sürətli giriş</div>
+    <input type="text" id="usernameInput" placeholder="Adınızı daxil edin...">
+    <button id="loginBtn" class="main-btn" style="background: #444;">Sürətli Başla</button>
+    <div id="recaptcha-container"></div>
+  </div>
+
+  <!-- CALL SCREEN -->
+  <div id="callScreen">
+    <div>
+      <div id="callStatusTitle" style="font-size: 18px; opacity: 0.8; letter-spacing: 1px;">SƏSLİ ZƏNG...</div>
+      <div id="callTargetName" style="font-size: 28px; font-weight: bold; margin-top: 10px;">İstifadəçi</div>
+    </div>
+    <div class="call-avatar" id="callAvatarIcon">📞</div>
+    <div class="call-actions">
+      <button class="call-btn accept-call" id="answerCallBtn" style="display:none;" title="Qəbul Et">✔</button>
+      <button class="call-btn end-call" id="hangUpBtn" title="Zəngi Bitir">✖</button>
+    </div>
+  </div>
+
+  <!-- TOAST BİLDİRİŞİ -->
+  <div id="toast"></div>
+
+  <!-- PROFILE & SETTINGS MODAL -->
+  <div id="profileModal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Profil və Parametrlər <button onclick="closeModal('profileModal')" class="icon-btn" style="font-size:18px;">✖</button></h3>
+      <div class="settings-group" style="text-align: center;">
+        <div class="avatar" id="modalAvatar" style="width: 80px; height: 80px; margin: 0 auto 10px; font-size: 32px; cursor: pointer;" title="Şəkli dəyiş">K</div>
+        <input type="file" id="avatarFileInput" style="display: none;" accept="image/*">
+        <small style="opacity: 0.6;">Şəkli dəyişmək üçün klikləyin</small>
+      </div>
+      <div class="settings-group">
+        <label>Ad və Soyad</label>
+        <input type="text" id="settingsNameInput">
+      </div>
+      <div class="settings-group">
+        <label>Status / Haqqımda</label>
+        <input type="text" id="settingsAboutInput" value="Mövcud deyil, proqramlaşdırma ilə məşğulam 🚀">
+      </div>
+      <div class="settings-group">
+        <label>Tətbiq Teması</label>
+        <select id="themeSelect">
+          <option value="theme-dark">WhatsApp Qaranlıq (Default)</option>
+          <option value="theme-light">WhatsApp İşıqlı</option>
+          <option value="theme-darkblue">Midnight Göy</option>
+          <option value="theme-matrix">Matrix Yaşıl</option>
+        </select>
+      </div>
+      <div class="settings-group">
+        <label>Xüsusi Vurğu Rəngi</label>
+        <input type="color" id="customAccentInput" value="#00a884">
+      </div>
+      <button id="saveProfileBtn" class="main-btn">Yadda Saxla</button>
+    </div>
+  </div>
+
+  <!-- NEW GROUP MODAL -->
+  <div id="groupModal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Yeni Qrup Yarat <button onclick="closeModal('groupModal')" class="icon-btn" style="font-size:18px;">✖</button></h3>
+      <div class="settings-group">
+        <label>Qrupun Adı</label>
+        <input type="text" id="groupNameInput" placeholder="Məs: Proqramçılar 💻">
+      </div>
+      <button id="createGroupBtn" class="main-btn">Qrup Yarat</button>
+    </div>
+  </div>
+
+  <!-- POLL / SORĞU MODAL -->
+  <div id="pollModal" class="modal-overlay">
+    <div class="modal-card">
+      <h3>Sorğu Yarat <button onclick="closeModal('pollModal')" class="icon-btn" style="font-size:18px;">✖</button></h3>
+      <div class="settings-group">
+        <label>Sual</label>
+        <input type="text" id="pollQuestionInput" placeholder="Sualınızı yazın...">
+      </div>
+      <div class="settings-group"><label>Seçim 1</label><input type="text" id="pollOpt1"></div>
+      <div class="settings-group"><label>Seçim 2</label><input type="text" id="pollOpt2"></div>
+      <div class="settings-group"><label>Seçim 3 (istəyə bağlı)</label><input type="text" id="pollOpt3"></div>
+      <div class="settings-group"><label>Seçim 4 (istəyə bağlı)</label><input type="text" id="pollOpt4"></div>
+      <button id="createPollBtn" class="main-btn">Sorğunu Göndər</button>
+    </div>
+  </div>
+
+  <!-- STATUS / STORIES MODAL -->
+  <div id="statusModal" class="modal-overlay">
+    <div class="modal-card" style="text-align: center;">
+      <h3>Status / Hekayələr <button onclick="closeModal('statusModal')" class="icon-btn" style="font-size:18px;">✖</button></h3>
+      <div id="statusListArea" style="margin: 20px 0; min-height: 150px; background: #000; border-radius: 12px; color: white; font-size: 14px; padding: 14px; text-align:left; max-height: 300px; overflow-y: auto;">
+        Hələ status paylaşılmayıb.
+      </div>
+      <input type="file" id="statusFileInput" style="display: none;" accept="image/*">
+      <button onclick="document.getElementById('statusFileInput').click()" class="main-btn">📸 Yeni Status Paylaş</button>
+    </div>
+  </div>
+
+  <!-- MAIN CHAT APP CONTAINER -->
+  <div id="chatApp" class="chat-app">
+
+    <!-- LEFT SIDEBAR ICONS -->
+    <div class="sidebar-nav">
+      <div class="nav-icons">
+        <button class="nav-btn active" id="tabChats" title="Söhbətlər">💬</button>
+        <button class="nav-btn" id="tabStatus" title="Statuslar">⭕</button>
+        <button class="nav-btn" id="tabCreateGroup" title="Qrup Yarat" onclick="openModal('groupModal')">👥</button>
+      </div>
+      <div class="nav-icons">
+        <button class="nav-btn" id="tabSettings" title="Parametrlər" onclick="openModal('profileModal')">⚙️</button>
+        <div class="avatar" id="mySidebarAvatar" style="width: 38px; height: 38px; font-size: 15px; cursor: pointer;" onclick="openModal('profileModal')">K</div>
+      </div>
+    </div>
+
+    <!-- CHATS LIST COLUMN -->
+    <div class="chats-column">
+      <div class="column-header">
+        <h3 id="columnTitle">Söhbətlər</h3>
+        <div>
+          <button onclick="openModal('profileModal')" class="icon-btn" title="Profil">👤</button>
+          <button id="logoutBtn" class="icon-btn" style="color: #dc3545;" title="Çıxış">🚪</button>
+        </div>
+      </div>
+      <div class="search-box-wrap">
+        <input type="text" id="searchInput" placeholder="Söhbətlərdə axtar...">
+      </div>
+      <div class="items-list" id="contactsList">
+        <div class="list-item active" onclick="switchToGlobal()">
+          <div class="avatar">🌐</div>
+          <div>
+            <div style="font-weight: bold; font-size: 14px;">Ümumi Söhbət Otağı</div>
+            <div style="font-size: 12px; opacity: 0.6;">Bütün istifadəçilər burada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CHAT PANEL -->
+    <div class="chat-main-panel">
+      <div class="chat-header">
+        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+          <button class="icon-btn" id="backBtn" title="Geri">←</button>
+          <div class="avatar" id="activeChatAvatar">🌐</div>
+          <div style="min-width:0;">
+            <div id="activeChatName" style="font-weight: bold; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw;">Ümumi Söhbət Otağı</div>
+            <div id="activeChatStatus" style="font-size: 11px; color: var(--accent-color);">Aktiv</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button class="icon-btn" id="startAudioCall" title="Səsli Zəng Et">📞</button>
+          <button class="icon-btn" id="startVideoCall" title="Video Zəng Et">📹</button>
+        </div>
+      </div>
+
+      <!-- MESSAGES LIST -->
+      <div id="messagesList" class="chat-messages"></div>
+
+      <!-- TYPING INDICATOR -->
+      <div id="typingIndicator" style="font-size: 11px; color: var(--accent-color); padding: 2px 16px; min-height: 18px; font-style: italic;"></div>
+
+      <!-- REPLY PREVIEW BAR -->
+      <div id="replyPreview" style="background: var(--header-bg); padding: 6px 12px; font-size: 12px; display: none; justify-content: space-between; border-left: 3px solid var(--accent-color); align-items: center;">
+        <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Cavablandırılır: <i id="replyText">...</i></span>
+        <button id="cancelReplyBtn" style="background:none; border:none; color:inherit; cursor:pointer;">✖</button>
+      </div>
+
+      <!-- INPUT BAR -->
+      <div class="chat-input-container">
+        <button class="icon-btn" id="fileBtn" title="Şəkil / Fayl Göndər">📁</button>
+        <input type="file" id="fileInput" style="display: none;">
+
+        <button class="icon-btn mic-btn" id="micBtn" title="Səsli Mesaj Yaz">🎤</button>
+        <button class="icon-btn" id="pollBtn" title="Sorğu Yarat">📊</button>
+        <button class="icon-btn" id="scheduleBtn" title="Mesajı Planlaşdır">🕒</button>
+        <input type="datetime-local" id="scheduleInput" style="display:none;">
+        <button class="icon-btn" id="selfDestructBtn" title="1 saatlıq özünü-məhv edən mesaj rejimi" style="color:#8696a0;">⏳</button>
+
+        <input type="text" id="messageInput" placeholder="Mesaj yazın..." autocomplete="off">
+        <button id="sendBtn" class="send-btn">➤</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FIREBASE & CORE APPLICATION SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, setDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDsiYE9APSiFshLgQcsn2B318-ew7FRE8",
+      authDomain: "menimcattetbiqim.firebaseapp.com",
+      projectId: "menimcattetbiqim",
+      storageBucket: "menimcattetbiqim.firebasestorage.app",
+      messagingSenderId: "532665523021",
+      appId: "1:532665523021:web:6069400aab4a767787b504"
+    };
+
+    let auth, db, storage;
+    let currentUser = null;
+    let selectedTargetUid = "global";
+    let selectedTargetType = "room"; // 'room' (ümumi) | 'group' | 'user'
+    let activeReply = null;
+    let messagesUnsubscribe = null;
+    let statusUnsubscribe = null;
+    let typingUnsubscribe = null;
+    let usersListCache = [];
+    let groupsListCache = [];
+    let searchQuery = "";
+    let confirmationResultGlobal = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let localMode = false;
+    let pendingName = null;
+    let myNameCache = "İstifadəçi";
+    let localMessages = [];
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      storage = getStorage(app);
+    } catch(e) { console.log("Firebase yüklənmədi."); }
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[c]));
+
+    const roomIdFor = (a, b) => [a, b].sort().join("_");
+
+    window.openModal = (id) => document.getElementById(id).style.display = "flex";
+    window.closeModal = (id) => document.getElementById(id).style.display = "none";
+
+    // YENİ: Toast bildirişi
+    let toastTimer = null;
+    function showToast(text) {
+      const t = document.getElementById("toast");
+      t.innerText = text;
+      t.style.display = "block";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.style.display = "none"; }, 2500);
+    }
+
+    // YENİ: yeni mesaj səsi (WebAudio ilə, fayl lazım deyil)
+    function playNotifSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.setValueAtTime(880, ctx.currentTime);
+        o.frequency.setValueAtTime(660, ctx.currentTime + 0.12);
+        g.gain.setValueAtTime(0.06, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        o.start(); o.stop(ctx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
+    document.getElementById("searchInput").oninput = (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      renderSidebarLists();
+    };
+
+    const themeSelect = document.getElementById("themeSelect");
+    themeSelect.onchange = (e) => {
+      document.body.className = e.target.value;
+      localStorage.setItem("kharimli_whatsapp_theme", e.target.value);
+    };
+    const savedTheme = localStorage.getItem("kharimli_whatsapp_theme");
+    if(savedTheme) {
+      document.body.className = savedTheme;
+      themeSelect.value = savedTheme;
+    }
+
+    const accentInput = document.getElementById("customAccentInput");
+    accentInput.oninput = (e) => {
+      document.documentElement.style.setProperty('--accent-color', e.target.value);
+      localStorage.setItem("kharimli_whatsapp_accent", e.target.value);
+    };
+    const savedAccent = localStorage.getItem("kharimli_whatsapp_accent");
+    if(savedAccent) {
+      document.documentElement.style.setProperty('--accent-color', savedAccent);
+      accentInput.value = savedAccent;
+    }
+
+    document.getElementById("modalAvatar").onclick = () => document.getElementById("avatarFileInput").click();
+    document.getElementById("avatarFileInput").onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result;
+        document.getElementById("modalAvatar").style.backgroundImage = `url(${base64})`;
+        document.getElementById("mySidebarAvatar").style.backgroundImage = `url(${base64})`;
+        document.getElementById("mySidebarAvatar").innerText = "";
+        if(currentUser && db && !localMode) {
+          await setDoc(doc(db, "users", currentUser.uid), { avatar: base64 }, { merge: true });
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+    document.getElementById("saveProfileBtn").onclick = async () => {
+      const newName = document.getElementById("settingsNameInput").value.trim();
+      const newAbout = document.getElementById("settingsAboutInput").value.trim();
+      if(newName) {
+        myNameCache = newName;
+        document.getElementById("mySidebarAvatar").innerText = newName[0].toUpperCase();
+        if(currentUser && db && !localMode) {
+          await setDoc(doc(db, "users", currentUser.uid), { name: newName, about: newAbout }, { merge: true });
+        }
+      }
+      closeModal('profileModal');
+    };
+
+    document.getElementById("googleLoginBtn").onclick = async () => {
+      if (location.protocol === "file:") return alert("Google girişi yalnız sayt kimi açıldıqda (http/https) işləyir.");
+      if (!auth) return alert("Firebase aktiv deyil!");
+      try {
+        const provider = new GoogleAuthProvider();
+        const res = await signInWithPopup(auth, provider);
+        const user = res.user;
+        const name = user.displayName || user.email.split('@')[0];
+        await setDoc(doc(db, "users", user.uid), { uid: user.uid, name: name, email: user.email, online: true, lastSeen: serverTimestamp() }, { merge: true });
+      } catch (err) { alert("Google giriş xətası: " + err.message); }
+    };
+
+    document.getElementById("sendOtpBtn").onclick = async () => {
+      if (location.protocol === "file:") return alert("SMS girişi yalnız sayt kimi açıldıqda (http/https) işləyir.");
+      const phone = document.getElementById("phoneInput").value.trim();
+      if (!phone) return alert("Nömrəni daxil edin");
+      try {
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+        }
+        confirmationResultGlobal = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+        document.getElementById("otpBox").style.display = "block";
+        alert("SMS kod göndərildi!");
+      } catch (err) { alert("SMS xətası: " + err.message); }
+    };
+
+    document.getElementById("verifyOtpBtn").onclick = async () => {
+      const code = document.getElementById("otpInput").value.trim();
+      if (!code) return alert("Kodu daxil edin!");
+      try {
+        const res = await confirmationResultGlobal.confirm(code);
+        const user = res.user;
+        await setDoc(doc(db, "users", user.uid), { uid: user.uid, name: "İstifadəçi_" + user.phoneNumber.slice(-4), phone: user.phoneNumber, online: true, lastSeen: serverTimestamp() }, { merge: true });
+      } catch (err) { alert("Təsdiq kodu səhvdir!"); }
+    };
+
+    document.getElementById("loginBtn").onclick = async () => {
+      const name = document.getElementById("usernameInput").value.trim() || "User_" + Math.floor(Math.random()*1000);
+      if (auth && db) {
+        try {
+          pendingName = name;
+          await signInAnonymously(auth);
+          return;
+        } catch (e) { pendingName = null; }
+      }
+      localLogin(name);
+    };
+
+    function localLogin(name) {
+      localMode = true;
+      currentUser = { uid: "local_" + Date.now() };
+      enterApp(name);
+    }
+
+    function enterApp(name) {
+      myNameCache = name;
+      document.getElementById("authScreen").style.display = "none";
+      document.getElementById("chatApp").style.display = "flex";
+      document.getElementById("settingsNameInput").value = name;
+      document.getElementById("mySidebarAvatar").innerText = name[0].toUpperCase();
+
+      loadMessages();
+      if(db && !localMode) {
+        loadUsersAndGroups();
+        setupTypingListener();
+        watchStatuses();
+        startExpiryJanitor();
+      } else {
+        renderSidebarLists();
+      }
+    }
+
+    if (auth && db) {
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
+        currentUser = user;
+
+        let storedName = null, storedAvatar = null;
+        try {
+          const s = await getDoc(doc(db, "users", user.uid));
+          if (s.exists()) { storedName = s.data().name; storedAvatar = s.data().avatar; }
+        } catch(_) {}
+
+        const myName = pendingName || user.displayName || storedName || "İstifadəçi";
+        pendingName = null;
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid, name: myName, online: true, lastSeen: serverTimestamp()
+        }, { merge: true });
+
+        if (storedAvatar) {
+          document.getElementById("mySidebarAvatar").style.backgroundImage = `url(${storedAvatar})`;
+          document.getElementById("mySidebarAvatar").innerText = "";
+          document.getElementById("modalAvatar").style.backgroundImage = `url(${storedAvatar})`;
+        }
+        enterApp(myName);
+      });
+    }
+
+    document.getElementById("logoutBtn").onclick = async () => {
+      if(currentUser && db && !localMode) {
+        await setDoc(doc(db, "users", currentUser.uid), { online: false, lastSeen: serverTimestamp() }, { merge: true });
+        if(auth) await signOut(auth);
+      }
+      location.reload();
+    };
+
+    document.getElementById("createGroupBtn").onclick = async () => {
+      const gName = document.getElementById("groupNameInput").value.trim();
+      if(!gName) return alert("Qrup adını daxil edin!");
+      if(db && currentUser && !localMode) {
+        await addDoc(collection(db, "groups"), { name: gName, creator: currentUser.uid, members: [currentUser.uid], createdAt: serverTimestamp() });
+      }
+      closeModal('groupModal');
+      document.getElementById("groupNameInput").value = "";
+    };
+
+    document.getElementById("pollBtn").onclick = () => openModal('pollModal');
+    document.getElementById("createPollBtn").onclick = async () => {
+      const q = document.getElementById("pollQuestionInput").value.trim();
+      const opts = [1,2,3,4].map(n => document.getElementById(`pollOpt${n}`).value.trim()).filter(Boolean);
+      if(!q || opts.length < 2 || !currentUser) return alert("Sual və ən azı 2 seçim daxil edin!");
+      const msg = { ...baseMsg(), type: "poll", question: q, options: opts, votes: {} };
+      if (localMode) { localMessages.push({ id: "l" + Date.now(), ...msg }); loadMessages(); }
+      else await addDoc(collection(db, "messages"), msg);
+      closeModal('pollModal');
+      document.getElementById("pollQuestionInput").value = "";
+      [1,2,3,4].forEach(n => document.getElementById(`pollOpt${n}`).value = "");
+    };
+
+    // DÜZƏLİŞ: sorğu səsverməsi indi lokal rejimdə də işləyir
+    window.votePoll = async (msgId, optIdx) => {
+      if(!currentUser) return;
+      if (localMode) {
+        const m = localMessages.find(x => x.id === msgId);
+        if(!m) return;
+        m.votes = m.votes || {};
+        Object.keys(m.votes).forEach(k => { m.votes[k] = (m.votes[k] || []).filter(u => u !== currentUser.uid); });
+        (m.votes[optIdx] = m.votes[optIdx] || []).push(currentUser.uid);
+        loadMessages();
+        return;
+      }
+      if (!db) return;
+      const ref = doc(db, "messages", msgId);
+      const snap = await getDoc(ref);
+      if(!snap.exists()) return;
+      let votes = snap.data().votes || {};
+      Object.keys(votes).forEach(k => { votes[k] = (votes[k] || []).filter(u => u !== currentUser.uid); });
+      if(!votes[optIdx]) votes[optIdx] = [];
+      votes[optIdx].push(currentUser.uid);
+      await updateDoc(ref, { votes });
+    };
+
+    async function loadUsersAndGroups() {
+      onSnapshot(collection(db, "users"), (snapshot) => {
+        usersListCache = [];
+        snapshot.forEach(docSnap => {
+          const u = docSnap.data();
+          if(currentUser && u.uid !== currentUser.uid) usersListCache.push(u);
+        });
+        renderSidebarLists();
+      });
+
+      onSnapshot(collection(db, "groups"), (snapshot) => {
+        groupsListCache = [];
+        snapshot.forEach(docSnap => {
+          groupsListCache.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderSidebarLists();
+      });
+    }
+
+    function renderSidebarLists() {
+      const list = document.getElementById("contactsList");
+      const q = searchQuery;
+      let html = "";
+
+      if(!q || "ümumi söhbət otağı".includes(q)) {
+        html += `
+          <div class="list-item ${selectedTargetUid === 'global' && selectedTargetType === 'room' ? 'active' : ''}" onclick="switchToGlobal()">
+            <div class="avatar">🌐</div>
+            <div>
+              <div style="font-weight: bold; font-size: 14px;">Ümumi Söhbət Otağı</div>
+              <div style="font-size: 12px; opacity: 0.6;">Bütün istifadəçilər</div>
+            </div>
+          </div>
+        `;
+      }
+
+      groupsListCache.filter(g => !q || (g.name || "").toLowerCase().includes(q)).forEach(g => {
+        html += `
+          <div class="list-item ${selectedTargetUid === g.id && selectedTargetType === 'group' ? 'active' : ''}" onclick="switchToTarget('${g.id}', '${esc(g.name).replace(/'/g, "&#39;")}', 'group')">
+            <div class="avatar" style="background: #00a884;">👥</div>
+            <div>
+              <div style="font-weight: bold; font-size: 14px;">${esc(g.name)}</div>
+              <div style="font-size: 12px; opacity: 0.6;">Qrup Söhbəti</div>
+            </div>
+          </div>
+        `;
+      });
+
+      usersListCache.filter(u => !q || (u.name || "").toLowerCase().includes(q)).forEach(u => {
+        const dot = u.online ? "active" : "";
+        const safeName = esc(u.name || "İstifadəçi");
+        html += `
+          <div class="list-item ${selectedTargetUid === u.uid && selectedTargetType === 'user' ? 'active' : ''}" onclick="switchToTarget('${u.uid}', '${safeName.replace(/'/g, "&#39;")}', 'user')">
+            <div class="avatar" ${u.avatar ? `style="background-image:url(${u.avatar})"` : ''}>${u.avatar ? '' : safeName[0].toUpperCase()}
+              <div class="online-badge ${dot}"></div>
+            </div>
+            <div>
+              <div style="font-weight: bold; font-size: 14px;">${safeName}</div>
+              <div style="font-size: 12px; opacity: 0.6;">${u.online ? 'İnternetdə' : 'Oflayn'}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      list.innerHTML = html;
+    }
+
+    // YENİ: mobil rejimdə söhbət açıldıqda siyahını gizlədir
+    function openMobileChat() {
+      document.getElementById('chatApp').classList.add('mobile-chat-open');
+    }
+
+    document.getElementById("backBtn").onclick = () => {
+      document.getElementById('chatApp').classList.remove('mobile-chat-open');
+    };
+
+    window.switchToGlobal = () => {
+      selectedTargetUid = "global";
+      selectedTargetType = "room";
+      document.getElementById("activeChatName").innerText = "Ümumi Söhbət Otağı";
+      document.getElementById("activeChatAvatar").innerText = "🌐";
+      document.getElementById("activeChatStatus").innerText = "Hamı buradadır";
+      openMobileChat();
+      loadMessages();
+      renderSidebarLists();
+    };
+
+    window.switchToTarget = (id, name, type) => {
+      selectedTargetUid = id;
+      selectedTargetType = type;
+      document.getElementById("activeChatName").innerText = name;
+      document.getElementById("activeChatAvatar").innerText = type === 'group' ? '👥' : (name[0] || "?").toUpperCase();
+      document.getElementById("activeChatStatus").innerText = type === 'group' ? 'Qrup söhbəti' : 'Şəxsi söhbət';
+
+      if(type === 'group' && db && !localMode && currentUser) {
+        const g = groupsListCache.find(gr => gr.id === id);
+        if(g && (!g.members || !g.members.includes(currentUser.uid))) {
+          updateDoc(doc(db, "groups", id), { members: arrayUnion(currentUser.uid) }).catch(() => {});
+        }
+      }
+
+      openMobileChat();
+      loadMessages();
+      renderSidebarLists();
+    };
+
+    // ============ MESAJLAR ============
+    let msgMapA = new Map();
+
+    function baseMsg() {
+      const m = { senderUid: currentUser.uid, createdAt: localMode ? Date.now() : serverTimestamp() };
+      if (selectedTargetType === 'user') m.roomId = roomIdFor(currentUser.uid, selectedTargetUid);
+      else m.targetUid = selectedTargetUid;
+      return m;
+    }
+
+    // YENİ: vaxt düzgün formatda göstərilir (serverTimestamp, lokal rəqəm və ya fallback)
+    function msgTime(m) {
+      let t = Date.now();
+      if (m.createdAt && typeof m.createdAt.toMillis === "function") t = m.createdAt.toMillis();
+      else if (typeof m.createdAt === "number") t = m.createdAt;
+      return new Date(t).toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderMessagesList() {
+      const merged = [...msgMapA.entries()].map(([id, m]) => ({ id, m }));
+      merged.sort((a, b) => {
+        const ta = a.m.createdAt?.toMillis?.() ?? a.m.createdAt ?? 0;
+        const tb = b.m.createdAt?.toMillis?.() ?? b.m.createdAt ?? 0;
+        return ta - tb;
+      });
+
+      const list = document.getElementById("messagesList");
+      list.innerHTML = "";
+
+      merged.forEach(({ id, m }) => {
+        const isMe = currentUser && m.senderUid === currentUser.uid;
+        const wrap = document.createElement("div");
+        wrap.className = `message-wrapper ${isMe ? "sent" : "received"}`;
+
+        // Mobil üçün: uzun basımda əməliyyatlar paneli açılır
+        wrap.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          document.querySelectorAll(".message-wrapper.show-actions").forEach(w => w.classList.remove("show-actions"));
+          wrap.classList.add("show-actions");
+        });
+
+        let content = "";
+        if(m.replyTo) content += `<div style="background:rgba(0,0,0,0.2); border-left:3px solid var(--accent-color); padding:4px 8px; font-size:11px; margin-bottom:6px; border-radius:4px;">↩️ ${esc(m.replyTo)}</div>`;
+
+        if(m.type === "image") {
+          content += `<img src="${m.fileUrl}" style="max-width:100%; max-width:260px; border-radius:8px; display:block;">`;
+        } else if(m.type === "audio") {
+          content += `<audio controls src="${m.fileUrl}" style="max-width: 200px; height: 35px;"></audio>`;
+        } else if(m.type === "file") {
+          content += `<a href="${m.fileUrl}" download="${esc(m.fileName)}" style="color:inherit; text-decoration:none;">📄 <b>${esc(m.fileName)}</b> (${esc(m.fileSize)})</a>`;
+        } else if(m.type === "poll") {
+          const votes = m.votes || {};
+          const total = Object.values(votes).reduce((s, arr) => s + arr.length, 0);
+          content += `<div style="min-width:200px;"><div style="font-weight:bold; margin-bottom:8px;">📊 ${esc(m.question)}</div>`;
+          (m.options || []).forEach((opt, idx) => {
+            const count = votes[idx] ? votes[idx].length : 0;
+            const pct = total ? Math.round((count / total) * 100) : 0;
+            const iVoted = currentUser && votes[idx] && votes[idx].includes(currentUser.uid);
+            content += `<div onclick="window.votePoll('${id}', ${idx})" style="cursor:pointer; margin-bottom:6px; padding:6px 10px; border-radius:8px; background:rgba(120,120,120,0.15); position:relative; overflow:hidden;">
+              <div style="position:absolute; top:0; left:0; bottom:0; width:${pct}%; background:var(--accent-color); opacity:0.3;"></div>
+              <div style="position:relative; display:flex; justify-content:space-between; gap:8px;"><span>${iVoted ? '✓ ' : ''}${esc(opt)}</span><span>${pct}%</span></div>
+            </div>`;
+          });
+          content += `<div style="font-size:11px; opacity:0.6;">${total} səs</div></div>`;
+        } else {
+          content += `<div>${esc(m.text)}</div>`;
+        }
+
+        let reactionsHtml = "";
+        if(m.reactions) {
+          reactionsHtml = `<div class="reactions-container">`;
+          for(let emoji in m.reactions) {
+            reactionsHtml += `<span>${esc(emoji)} ${m.reactions[emoji].length}</span>`;
+          }
+          reactionsHtml += `</div>`;
+        }
+
+        const seenByOthers = m.seenBy && m.seenBy.some(uid => uid !== m.senderUid);
+        const statusTick = isMe ? (seenByOthers ? '<span style="color:#53bdeb;">✔✔</span>' : '<span style="opacity:0.6;">✔</span>') : '';
+        // YENİ: düzəldilmiş işarəsi + mesaj saatı
+        const editedTag = m.edited ? ' <span class="edited-tag">(dəyişildi)</span>' : '';
+        const timeStr = msgTime(m);
+        const plainText = esc(m.text || 'Media').replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+
+        wrap.innerHTML = `
+          <div class="msg-actions">
+            <button onclick="window.toggleEmojiPopup('${id}')">⭐</button>
+            <button onclick="window.replyMsg('${plainText}')">↩️</button>
+            ${m.type === "text" ? `<button onclick="window.copyMsg('${plainText}')" title="Kopyala">📋</button>` : ''}
+            ${isMe && m.type === "text" ? `<button onclick="window.editMsg('${id}')" title="Düzəlt">✏️</button>` : ''}
+            ${isMe ? `<button onclick="window.deleteMsg('${id}')">🗑️</button>` : ''}
+
+            <div id="popup-${id}" class="emoji-picker-popup">
+              <span onclick="window.addReaction('${id}', '❤️')">❤️</span>
+              <span onclick="window.addReaction('${id}', '😂')">😂</span>
+              <span onclick="window.addReaction('${id}', '👍')">👍</span>
+              <span onclick="window.addReaction('${id}', '🔥')">🔥</span>
+            </div>
+          </div>
+          <div class="message-box">
+            ${content}
+            ${reactionsHtml}
+          </div>
+          <div class="message-meta">${editedTag} ${statusTick} ${timeStr}</div>
+        `;
+        list.appendChild(wrap);
+
+        if(db && !localMode && currentUser) {
+          if(!isMe && (!m.seenBy || !m.seenBy.includes(currentUser.uid))) {
+            updateDoc(doc(db, "messages", id), { seenBy: arrayUnion(currentUser.uid) }).catch(() => {});
+          }
+          if(m.expiresAt && m.expiresAt < Date.now()) {
+            deleteDoc(doc(db, "messages", id)).catch(() => {});
+          }
+        }
+      });
+      list.scrollTop = list.scrollHeight;
+    }
+
+    function loadMessages() {
+      if(messagesUnsubscribe) messagesUnsubscribe();
+      messagesUnsubscribe = null;
+      msgMapA = new Map();
+
+      if (localMode || !db) {
+        localMessages.forEach(m => {
+          const match = selectedTargetType === 'user'
+            ? m.roomId === roomIdFor(currentUser.uid, selectedTargetUid)
+            : m.targetUid === selectedTargetUid;
+          if (match) msgMapA.set(m.id, m);
+        });
+        renderMessagesList();
+        return;
+      }
+
+      let q;
+      if (selectedTargetType === 'user') {
+        q = query(collection(db, "messages"), where("roomId", "==", roomIdFor(currentUser.uid, selectedTargetUid)));
+      } else {
+        q = query(collection(db, "messages"), where("targetUid", "==", selectedTargetUid));
+      }
+
+      messagesUnsubscribe = onSnapshot(q, (snapshot) => {
+        msgMapA = new Map(snapshot.docs.map(d => [d.id, d.data()]));
+
+        // YENİ: başqa istifadəçidən gələn yeni mesajda səs + toast bildirişi
+        snapshot.docChanges().forEach(ch => {
+          if (ch.type === "added") {
+            const d = ch.doc.data();
+            if (currentUser && d.senderUid && d.senderUid !== currentUser.uid) {
+              playNotifSound();
+              if (document.hidden && "Notification" in window && Notification.permission === "granted") {
+                const sender = usersListCache.find(u => u.uid === d.senderUid);
+                new Notification(sender ? sender.name : "Yeni mesaj", { body: d.text || "Media göndərildi" });
+              }
+            }
+          }
+        });
+
+        renderMessagesList();
+      });
+    }
+
+    // YENİ: brauzer bildiriş icazəsi
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(() => {});
+    }
+
+    function startExpiryJanitor() {
+      setInterval(async () => {
+        if(!db || localMode || !currentUser) return;
+        try {
+          const snap = await getDocs(query(collection(db, "messages"), where("expiresAt", "<", Date.now())));
+          snap.forEach(d => deleteDoc(d.ref));
+        } catch(_) {}
+      }, 60000);
+    }
+
+    document.getElementById("sendBtn").onclick = sendTextMessage;
+    document.getElementById("messageInput").onkeypress = (e) => { if(e.key === "Enter") sendTextMessage(); };
+
+    let selfDestructMode = false;
+    document.getElementById("selfDestructBtn").onclick = () => {
+      selfDestructMode = !selfDestructMode;
+      document.getElementById("selfDestructBtn").style.color = selfDestructMode ? "#dc3545" : "#8696a0";
+      showToast(selfDestructMode ? "⏳ Özünü-məhv rejimi AKTİV (1 saat)" : "⏳ Özünü-məhv rejimi söndü");
+    };
+
+    document.getElementById("scheduleBtn").onclick = () => {
+      const el = document.getElementById("scheduleInput");
+      if(el.showPicker) el.showPicker(); else el.click();
+    };
+    document.getElementById("scheduleInput").onchange = async (e) => {
+      const when = new Date(e.target.value).getTime();
+      const inp = document.getElementById("messageInput");
+      const text = inp.value.trim();
+      if(!text) { alert("Əvvəlcə mesaj mətnini yazın, sonra vaxt seçin."); e.target.value = ""; return; }
+      const delay = when - Date.now();
+      if(!when || delay <= 0) { alert("Gələcək bir tarix/vaxt seçin."); e.target.value = ""; return; }
+      if (localMode || !db) { alert("Planlaşdırma yalnız Firebase rejimində işləyir."); e.target.value = ""; return; }
+      inp.value = "";
+      showToast(`🕒 Mesaj ${new Date(when).toLocaleString('az-AZ')} tarixində göndəriləcək`);
+      const targetSnap = { uid: selectedTargetUid, type: selectedTargetType };
+      setTimeout(async () => {
+        if(!currentUser || !db) return;
+        const m = { text, type: "text", senderUid: currentUser.uid, replyTo: null, createdAt: serverTimestamp() };
+        if (targetSnap.type === 'user') m.roomId = roomIdFor(currentUser.uid, targetSnap.uid);
+        else m.targetUid = targetSnap.uid;
+        await addDoc(collection(db, "messages"), m);
+      }, delay);
+      e.target.value = "";
+    };
+
+    async function sendTextMessage() {
+      const inp = document.getElementById("messageInput");
+      const text = inp.value.trim();
+      if(!text || !currentUser) return;
+
+      const msg = {
+        ...baseMsg(),
+        type: "text",
+        text,
+        replyTo: activeReply,
+        expiresAt: selfDestructMode ? (Date.now() + 3600000) : null
+      };
+
+      if (localMode) {
+        localMessages.push({ id: "l" + Date.now(), ...msg });
+        loadMessages();
+      } else {
+        await addDoc(collection(db, "messages"), msg);
+      }
+
+      inp.value = "";
+      cancelReply();
+    }
+
+    const msgInput = document.getElementById("messageInput");
+    msgInput.oninput = () => {
+      if(!currentUser || !db || localMode) return;
+      setDoc(doc(db, "typing", `${currentUser.uid}_${selectedTargetUid}`), { isTyping: true, senderUid: currentUser.uid, targetUid: selectedTargetUid }, { merge: true });
+      clearTimeout(window.tTimer);
+      window.tTimer = setTimeout(() => {
+        setDoc(doc(db, "typing", `${currentUser.uid}_${selectedTargetUid}`), { isTyping: false }, { merge: true });
+      }, 2000);
+    };
+
+    function setupTypingListener() {
+      if(typingUnsubscribe) typingUnsubscribe();
+      typingUnsubscribe = onSnapshot(collection(db, "typing"), (snapshot) => {
+        let txt = "";
+        snapshot.forEach(d => {
+          const data = d.data();
+          if(data.isTyping && data.senderUid !== currentUser?.uid && data.targetUid === selectedTargetUid) {
+            txt = "Yazır...";
+          }
+        });
+        document.getElementById("typingIndicator").innerText = txt;
+      });
+    }
+
+    document.getElementById("startAudioCall").onclick = () => {
+      document.getElementById("callScreen").style.display = "flex";
+      document.getElementById("callStatusTitle").innerText = "SƏSLİ ZƏNG EDİLİR...";
+      document.getElementById("callTargetName").innerText = document.getElementById("activeChatName").innerText;
+      document.getElementById("callAvatarIcon").innerText = "📞";
+      document.getElementById("answerCallBtn").style.display = "none";
+    };
+
+    document.getElementById("startVideoCall").onclick = () => {
+      document.getElementById("callScreen").style.display = "flex";
+      document.getElementById("callStatusTitle").innerText = "VİDEO ZƏNG EDİLİR...";
+      document.getElementById("callTargetName").innerText = document.getElementById("activeChatName").innerText;
+      document.getElementById("callAvatarIcon").innerText = "📹";
+      document.getElementById("answerCallBtn").style.display = "none";
+    };
+
+    document.getElementById("hangUpBtn").onclick = () => {
+      document.getElementById("callScreen").style.display = "none";
+    };
+
+    const micBtn = document.getElementById("micBtn");
+    micBtn.onclick = async () => {
+      if (localMode || !db) return alert("Səsli mesaj yalnız Firebase rejimində işləyir.");
+      if(!mediaRecorder || mediaRecorder.state === "inactive") {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = async () => {
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            try {
+              const sRef = ref(storage, `audio/${currentUser.uid}_${Date.now()}.webm`);
+              await uploadBytes(sRef, blob);
+              const url = await getDownloadURL(sRef);
+              await addDoc(collection(db, "messages"), { ...baseMsg(), fileUrl: url, type: "audio" });
+            } catch(err) { alert("Səsli mesaj yüklənmədi: " + err.message); }
+          };
+          mediaRecorder.start();
+          micBtn.style.color = "#dc3545";
+          showToast("🎤 Yazılır... təkrar basın və dayandırın");
+        } catch(e) { alert("Mikrofona icazə verilmədi!"); }
+      } else {
+        mediaRecorder.stop();
+        micBtn.style.color = "#8696a0";
+      }
+    };
+
+    document.getElementById("fileBtn").onclick = () => document.getElementById("fileInput").click();
+    document.getElementById("fileInput").onchange = async (e) => {
+      const file = e.target.files[0];
+      if(!file || !currentUser) return;
+      if (localMode || !db) { alert("Fayl göndərmə yalnız Firebase rejimində işləyir."); e.target.value=""; return; }
+      const isImg = file.type.startsWith("image/");
+      try {
+        const sRef = ref(storage, `uploads/${currentUser.uid}_${Date.now()}_${file.name}`);
+        await uploadBytes(sRef, file);
+        const url = await getDownloadURL(sRef);
+        await addDoc(collection(db, "messages"), {
+          ...baseMsg(),
+          fileUrl: url,
+          fileName: file.name,
+          fileSize: (file.size / 1024).toFixed(1) + " KB",
+          type: isImg ? "image" : "file"
+        });
+      } catch(err) { alert("Fayl yüklənmədi: " + err.message); }
+      e.target.value = "";
+    };
+
+    document.getElementById("tabStatus").onclick = () => openModal('statusModal');
+
+    function watchStatuses() {
+      if(statusUnsubscribe) statusUnsubscribe();
+      const q = query(collection(db, "statuses"), orderBy("createdAt", "desc"), limit(20));
+      statusUnsubscribe = onSnapshot(q, (snapshot) => {
+        let html = "";
+        snapshot.forEach(d => {
+          const s = d.data();
+          html += `<div style="margin-bottom:14px;">
+            <div style="font-size:12px; opacity:0.7; margin-bottom:4px;">${esc(s.name || "İstifadəçi")}</div>
+            <img src="${s.image}" style="max-width:100%; max-height:220px; border-radius:8px;">
+          </div>`;
+        });
+        document.getElementById("statusListArea").innerHTML = html || "Hələ status paylaşılmayıb.";
+      }, () => {
+        document.getElementById("statusListArea").innerHTML = "Statuslar yüklənmədi (Firestore qaydalarını yoxlayın).";
+      });
+    }
+
+    document.getElementById("statusFileInput").onchange = async (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      if (file.size > 500 * 1024) { alert("Şəkil 500KB-dan böyükdür (Firestore limiti 1MB). Kiçik şəkil seçin."); e.target.value=""; return; }
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result;
+        if (db && currentUser && !localMode) {
+          await addDoc(collection(db, "statuses"), { uid: currentUser.uid, name: myNameCache, image: base64, createdAt: serverTimestamp() });
+          closeModal('statusModal');
+        } else {
+          document.getElementById("statusListArea").innerHTML = `<img src="${base64}" style="max-width:100%; max-height:220px; border-radius:8px;">`;
+        }
+      };
+      reader.readAsDataURL(file);
+      e.target.value = "";
+    };
+
+    window.toggleEmojiPopup = (id) => {
+      const p = document.getElementById(`popup-${id}`);
+      p.style.display = p.style.display === "flex" ? "none" : "flex";
+    };
+
+    window.addReaction = async (msgId, emoji) => {
+      if(!currentUser || !db || localMode) return;
+      const ref = doc(db, "messages", msgId);
+      const snap = await getDoc(ref);
+      if(!snap.exists()) return;
+      let reactions = snap.data().reactions || {};
+      if(!reactions[emoji]) reactions[emoji] = [];
+      if(!reactions[emoji].includes(currentUser.uid)) {
+        reactions[emoji].push(currentUser.uid);
+      } else {
+        reactions[emoji] = reactions[emoji].filter(u => u !== currentUser.uid);
+        if(reactions[emoji].length === 0) delete reactions[emoji];
+      }
+      await updateDoc(ref, { reactions: reactions });
+      document.getElementById(`popup-${msgId}`).style.display = "none";
+    };
+
+    // YENİ: mesajı kopyala
+    window.copyMsg = (txt) => {
+      navigator.clipboard.writeText(txt).then(() => showToast("📋 Kopyalandı")).catch(() => alert("Kopyalama dəstəklənmir"));
+    };
+
+    // YENİ: öz mesajını düzəlt
+    window.editMsg = async (id) => {
+      const ref = doc(db, "messages", id);
+      let oldText = "";
+      try {
+        if (localMode) {
+          const lm = localMessages.find(x => x.id === id);
+          if(!lm) return;
+          oldText = lm.text || "";
+        } else {
+          const snap = await getDoc(ref);
+          if(!snap.exists()) return;
+          oldText = snap.data().text || "";
+        }
+      } catch(_) { return; }
+      const newText = prompt("Mesajı düzəldin:", oldText);
+      if(newText === null || !newText.trim()) return;
+      if (localMode) {
+        const lm = localMessages.find(x => x.id === id);
+        if(lm) { lm.text = newText.trim(); lm.edited = true; loadMessages(); }
+      } else if (db) {
+        await updateDoc(ref, { text: newText.trim(), edited: true }).catch(() => {});
+      }
+    };
+
+    window.replyMsg = (txt) => {
+      activeReply = txt;
+      document.getElementById("replyText").innerText = txt;
+      document.getElementById("replyPreview").style.display = "flex";
+      document.getElementById("messageInput").focus();
+    };
+
+    function cancelReply() {
+      activeReply = null;
+      document.getElementById("replyPreview").style.display = "none";
+    }
+    document.getElementById("cancelReplyBtn").onclick = cancelReply;
+
+    window.deleteMsg = async (id) => {
+      if(confirm("Mesajı silmək istəyirsən?")) {
+        if (localMode) {
+          localMessages = localMessages.filter(m => m.id !== id);
+          loadMessages();
+        } else if (db) {
+          await deleteDoc(doc(db, "messages", id));
+        }
+      }
+    };
+
+    const dropZone = document.getElementById("messagesList");
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.style.outline = "2px dashed var(--accent-color)";
+    });
+    dropZone.addEventListener("dragleave", () => { dropZone.style.outline = "none"; });
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.style.outline = "none";
+      const file = e.dataTransfer.files[0];
+      if(!file || !currentUser) return;
+      document.getElementById("fileInput").onchange({ target: { files: [file], value: "" } });
+    });
+
+    // Boş yerə klikləyəndə açıq əməliyyat panelini bağla
+    document.addEventListener("click", (e) => {
+      if(!e.target.closest(".message-wrapper")) {
+        document.querySelectorAll(".message-wrapper.show-actions").forEach(w => w.classList.remove("show-actions"));
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") {
+        document.querySelectorAll(".modal-overlay").forEach(m => { m.style.display = "none"; });
+        document.getElementById("callScreen").style.display = "none";
+      }
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        document.getElementById("searchInput").focus();
+      }
+    });
+  </script>
+</body>
+</html>
